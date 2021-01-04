@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Color Picker for Wayland
+GenericName=Color Picker
+Comment=A simple wayland color picker that also works on wlroots.
+Keywords=color;picker;wl-color-picker;
+Categories=Graphics;2DGraphics;
+Exec=wl-color-picker
+Hidden=false
+Terminal=false
+Icon=wl-color-picker
