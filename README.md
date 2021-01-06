@@ -25,3 +25,10 @@ so all credits go to the papirus icon designers.
 * __convert__ - uitlity from imagemagick to make the pixel a hex number
 * __zenity__ - display a nice color selector dialog where the picked color can be tweaked further
 * __wl-copy__ - copy the selected color to the clipboard
+
+## Packages
+
+ArchLinux - install from [AUR](https://aur.archlinux.org/packages/wl-color-picker)
+```sh
+yay -S wl-color-picker
+```
