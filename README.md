@@ -22,7 +22,7 @@ so all credits go to the papirus icon designers.
 
 * __slurp__ - provides the screen location picker
 * __grim__ - uses the location provided by slurp and generates a pixel
-* __convert__ - uitlity from imagemagick to make the pixel a hex number
+* __convert__ - uitlity from imagemagick to make the pixel a hex number (graphicsmagick is also supported)
 * __zenity__ - display a nice color selector dialog where the picked color can be tweaked further
 * __wl-copy__ - copy the selected color to the clipboard
 
