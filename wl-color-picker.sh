@@ -12,6 +12,15 @@
 # https://unix.stackexchange.com/questions/320070/is-there-a-colour-picker-that-works-with-wayland-or-xwayland/523805#523805
 #
 
+# Check if running under wayland.
+if [ "$WAYLAND_DISPLAY" = "" ]; then
+    zenity  --error --width 400 \
+        --title "No wayland session found." \
+        --text "This color picker must be run under a valid wayland session."
+
+    exit 1
+fi
+
 # Get color position
 position=$(slurp -b 00000000 -p)
 
@@ -19,11 +28,28 @@ position=$(slurp -b 00000000 -p)
 # returning improper color.
 sleep 1
 
-# Store the hex color value
-color=$(grim -g "$position" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4)
+# Store the hex color value using graphicsmagick or imagemagick.
+if command -v /usr/bin/gm &> /dev/null; then
+    color=$(grim -g "$position" -t ppm - \
+        | /usr/bin/gm convert - -format '%[pixel:p{0,0}]' txt:- \
+        | tail -n 1 \
+        | rev \
+        | cut -d ' ' -f 1 \
+        | rev
+    )
+else
+    color=$(grim -g "$position" -t ppm - \
+        | convert - -format '%[pixel:p{0,0}]' txt:- \
+        | tail -n 1 \
+        | cut -d ' ' -f 4
+    )
+fi
 
 # Display a color picker and store the returned rgb color
-rgb_color=$(zenity --color-selection --title="Copy color to Clipboard" --color="${color}")
+rgb_color=$(zenity --color-selection \
+    --title="Copy color to Clipboard" \
+    --color="${color}"
+)
 
 # Execute if user didn't click cancel
 if [ "$rgb_color" != "" ]; then
