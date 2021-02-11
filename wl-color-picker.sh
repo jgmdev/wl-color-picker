@@ -30,7 +30,7 @@ sleep 1
 
 # Store the hex color value using graphicsmagick or imagemagick.
 if command -v /usr/bin/gm &> /dev/null; then
-    color=$(grim -g "$position" -t ppm - \
+    color=$(grim -g "$position" -t png - \
         | /usr/bin/gm convert - -format '%[pixel:p{0,0}]' txt:- \
         | tail -n 1 \
         | rev \
@@ -38,7 +38,7 @@ if command -v /usr/bin/gm &> /dev/null; then
         | rev
     )
 else
-    color=$(grim -g "$position" -t ppm - \
+    color=$(grim -g "$position" -t png - \
         | convert - -format '%[pixel:p{0,0}]' txt:- \
         | tail -n 1 \
         | cut -d ' ' -f 4
