@@ -60,5 +60,5 @@ if [ "$rgb_color" != "" ]; then
     done
 
     # Copy user selection to clipboard
-    echo $hex_color | wl-copy
+    echo $hex_color | wl-copy -n
 fi
