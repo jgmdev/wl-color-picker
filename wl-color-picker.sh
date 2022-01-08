@@ -45,20 +45,24 @@ else
     )
 fi
 
-# Display a color picker and store the returned rgb color
-rgb_color=$(zenity --color-selection \
-    --title="Copy color to Clipboard" \
-    --color="${color}"
-)
+if [ "$1" == "clipboard" ]; then
+	echo $color | wl-copy -n
+else
+	# Display a color picker and store the returned rgb color
+	rgb_color=$(zenity --color-selection \
+	    --title="Copy color to Clipboard" \
+	    --color="${color}"
+	)
 
-# Execute if user didn't click cancel
-if [ "$rgb_color" != "" ]; then
-    # Convert rgb color to hex
-    hex_color="#"
-    for value in $(echo "${rgb_color}" | grep -E -o -m1 '[0-9]+'); do
-        hex_color="$hex_color$(printf "%.2x" $value)"
-    done
+	# Execute if user didn't click cancel
+	if [ "$rgb_color" != "" ]; then
+	    # Convert rgb color to hex
+	    hex_color="#"
+	    for value in $(echo "${rgb_color}" | grep -E -o -m1 '[0-9]+'); do
+       		hex_color="$hex_color$(printf "%.2x" $value)"
+	    done
 
-    # Copy user selection to clipboard
-    echo $hex_color | wl-copy -n
+    	# Copy user selection to clipboard
+    	echo $hex_color | wl-copy -n
+	fi
 fi
