@@ -4,6 +4,11 @@ A script that provides a working color picker for wayland and wlroots
 by leveraging [grim](https://github.com/emersion/grim) and
 [slurp](https://github.com/emersion/slurp).
 
+## Usage
+  - Command `wl-color-picker` - Select position on screen and open color picker window
+  - Command `wl-color-picker clipboard` - Select position on screen without opening color picker window, just copy selected color to clipboard
+
+
 ## Inspiration
 
 This script is possible by the information provided on the following
