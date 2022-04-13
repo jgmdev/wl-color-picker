@@ -1,14 +1,12 @@
 .PHONY: install uninstall
 
 all:
-	@echo "Nothing to compile. Use 'make [DESTDIR=dir] install' to install wl-color-picker."
+	@echo "Nothing to compile. Use 'make [PREFIX=dir] install' to install wl-color-picker."
 
 install:
-	@if [ "$$DESTDIR" = "" ]; then \
-		if [ "$$(id -u)" -ne 0 ]; then \
-			echo "Please execute this script as root."; \
-			exit 1; \
-		fi; \
+	@if [ "$$PREFIX" = "" ]; then \
+		echo "Please set the installation PREFIX directory."; \
+		exit 1; \
 	fi;
 
 	@depends="grim slurp convert zenity wl-copy"; \
@@ -24,34 +22,34 @@ install:
 
 	@echo
 
-	@if [ -e "$$DESTDIR/usr/bin/wl-color-picker" ]; then \
+	@if [ -e "$$PREFIX/bin/wl-color-picker" ]; then \
 		echo "Please un-install the previous version first"; \
 		exit 1; \
 	fi; \
 
-	@if [ ! -d "$$DESTDIR/usr/bin" ]; then \
-		mkdir -p "$$DESTDIR/usr/bin"; \
+	@if [ ! -d "$$PREFIX/bin" ]; then \
+		mkdir -p "$$PREFIX/bin"; \
 	fi;
 
-	@if [ ! -d "$$DESTDIR/usr/share/applications" ]; then \
-		mkdir -p "$$DESTDIR/usr/share/applications"; \
+	@if [ ! -d "$$PREFIX/share/applications" ]; then \
+		mkdir -p "$$PREFIX/share/applications"; \
 	fi;
 
-	@if [ ! -d "$$DESTDIR/usr/share/icons" ]; then \
-		mkdir -p "$$DESTDIR/usr/share/icons"; \
+	@if [ ! -d "$$PREFIX/share/icons" ]; then \
+		mkdir -p "$$PREFIX/share/icons"; \
 	fi;
 
-	@if [ ! -d "$$DESTDIR/usr/share/icons/hicolor/scalable/apps" ]; then \
-		mkdir -p "$$DESTDIR/usr/share/icons/hicolor/scalable/apps"; \
+	@if [ ! -d "$$PREFIX/share/icons/hicolor/scalable/apps" ]; then \
+		mkdir -p "$$PREFIX/share/icons/hicolor/scalable/apps"; \
 	fi;
 
 	@echo 'Copying wl-color-picker'
 	@echo
 
-	cp wl-color-picker.sh "$$DESTDIR/usr/bin/wl-color-picker"
-	cp wl-color-picker.png "$$DESTDIR/usr/share/icons/"
-	cp wl-color-picker.svg "$$DESTDIR/usr/share/icons/hicolor/scalable/apps/"
-	cp wl-color-picker.desktop "$$DESTDIR/usr/share/applications/"
+	cp wl-color-picker.sh "$$PREFIX/bin/wl-color-picker"
+	cp wl-color-picker.png "$$PREFIX/share/icons/"
+	cp wl-color-picker.svg "$$PREFIX/share/icons/hicolor/scalable/apps/"
+	sed "s%^Exec=%Exec=$$PREFIX/bin/%" wl-color-picker.desktop > "$$PREFIX/share/applications/wl-color-picker.desktop"
 
 	@echo
 	@echo 'Done!'
@@ -59,18 +57,18 @@ install:
 	@exit 0
 
 uninstall:
-	@if [ "$$(id -u)" != "0" ]; then \
-		echo "Please execute uninstallation as root."; \
+	@if [ "$$PREFIX" = "" ]; then \
+		echo "Please set the installation PREFIX directory."; \
 		exit 1; \
 	fi;
 
 	@echo 'Uninstalling wl-color-picker'
 	@echo
 
-	rm "/usr/bin/wl-color-picker"
-	rm "/usr/share/icons/wl-color-picker.png"
-	rm "/usr/share/icons/hicolor/scalable/apps/wl-color-picker.svg"
-	rm "/usr/share/applications/wl-color-picker.desktop"
+	rm "$$PREFIX/bin/wl-color-picker"
+	rm "$$PREFIX/share/icons/wl-color-picker.png"
+	rm "$$PREFIX/share/icons/hicolor/scalable/apps/wl-color-picker.svg"
+	rm "$$PREFIX/share/applications/wl-color-picker.desktop"
 
 	@echo
 	@echo 'Done!'
