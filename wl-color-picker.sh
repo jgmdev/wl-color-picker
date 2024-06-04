@@ -47,6 +47,7 @@ fi
 
 if [ "$1" == "clipboard" ]; then
 	echo $color | wl-copy -n
+ 	notify-send "Color copied to clipboard." $color
 else
 	# Display a color picker and store the returned rgb color
 	rgb_color=$(zenity --color-selection \
