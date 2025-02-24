@@ -13,16 +13,18 @@
 #
 
 showhelp() {
-    echo "A basic color picker script."
+    echo "A basic wlroots compatible color picker script."
     echo ""
     echo "Usage:"
     echo "  wl-color-picker [command] [options]"
     echo ""
     echo "Commands:"
-    echo "  clipboard - Copy the output directly to clipboard without showing a dialog"
+    echo "  clipboard       Copy color to clipboard without dialog"
+    echo "    --no-notify   Don't show a system notification of copied color"
 }
 
 CLIPBOARD=0
+NO_NOTIFY=0
 
 while [ "$1" ]; do
     case $1 in
@@ -32,6 +34,9 @@ while [ "$1" ]; do
             ;;
         'clipboard' )
             CLIPBOARD=1
+            ;;
+        '--no-notify' )
+            NO_NOTIFY=1
             ;;
     esac
 
@@ -73,7 +78,9 @@ fi
 
 if [ $CLIPBOARD -eq 1 ]; then
     echo $color | wl-copy -n
-    notify-send "Color copied to clipboard." $color
+    if [ $NO_NOTIFY -ne 1 ]; then
+        notify-send "Color copied to clipboard." $color
+    fi
 else
     # Display a color picker and store the returned rgb color
     rgb_color=$(zenity --color-selection \
