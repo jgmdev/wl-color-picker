@@ -12,6 +12,32 @@
 # https://unix.stackexchange.com/questions/320070/is-there-a-colour-picker-that-works-with-wayland-or-xwayland/523805#523805
 #
 
+showhelp() {
+    echo "A basic color picker script."
+    echo ""
+    echo "Usage:"
+    echo "  wl-color-picker [command] [options]"
+    echo ""
+    echo "Commands:"
+    echo "  clipboard - Copy the output directly to clipboard without showing a dialog"
+}
+
+CLIPBOARD=0
+
+while [ "$1" ]; do
+    case $1 in
+        '-h' | '--help' | 'help' | '?' )
+            showhelp
+            exit
+            ;;
+        'clipboard' )
+            CLIPBOARD=1
+            ;;
+    esac
+
+    shift
+done
+
 # Check if running under wayland.
 if [ "$WAYLAND_DISPLAY" = "" ]; then
     zenity  --error --width 400 \
@@ -45,24 +71,25 @@ else
     )
 fi
 
-if [ "$1" == "clipboard" ]; then
-	echo $color | wl-copy -n
+if [ $CLIPBOARD -eq 1 ]; then
+    echo $color | wl-copy -n
+    notify-send "Color copied to clipboard." $color
 else
-	# Display a color picker and store the returned rgb color
-	rgb_color=$(zenity --color-selection \
-	    --title="Copy color to Clipboard" \
-	    --color="${color}"
-	)
+    # Display a color picker and store the returned rgb color
+    rgb_color=$(zenity --color-selection \
+        --title="Copy color to Clipboard" \
+        --color="${color}"
+    )
 
-	# Execute if user didn't click cancel
-	if [ "$rgb_color" != "" ]; then
-	    # Convert rgb color to hex
-	    hex_color="#"
-	    for value in $(echo "${rgb_color}" | grep -E -o -m1 '[0-9]+'); do
-       		hex_color="$hex_color$(printf "%.2x" $value)"
-	    done
+    # Execute if user didn't click cancel
+    if [ "$rgb_color" != "" ]; then
+        # Convert rgb color to hex
+        hex_color="#"
+        for value in $(echo "${rgb_color}" | grep -E -o -m1 '[0-9]+'); do
+           hex_color="$hex_color$(printf "%.2x" $value)"
+        done
 
-    	# Copy user selection to clipboard
-    	echo $hex_color | wl-copy -n
-	fi
+        # Copy user selection to clipboard
+        echo $hex_color | wl-copy -n
+    fi
 fi

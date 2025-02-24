@@ -17,7 +17,7 @@ install:
 		exit 1; \
 	fi;
 
-	@depends="grim slurp convert zenity wl-copy"; \
+	@depends="grim slurp convert zenity wl-copy notify-send"; \
 	for dependency in $$(echo "$$depends" | xargs) ; do \
 		echo "Checking for: $$dependency."; \
 		if ! which "$$dependency" > /dev/null 2>&1 ; then \
